@@ -12,6 +12,12 @@ Vue 3 + TypeScript + Vite + Ant Design Vue + Pinia + Vue Router + Axios + VueUse
 - 产品/研发双审批、开始灰度、紧急停止、回滚和恢复草稿。
 - 离线提示、VeeValidate + Zod 精确校验和 localStorage 持久化。
 
+## 版本与并发控制
+- 每次保存自增 `version`（乐观锁令牌），保存时比对持久化状态与当前编辑基准，不一致则拒绝覆盖并提示「内容已变化」。
+- 审批记在它批准的 `rulesVersion` 上；规则变更后 `rulesVersion` 自增，原审批失效，定时生效和正在进行的放量退回草稿重新确认。
+- 跨标签页通过 `storage` 事件检测外部改动，自动标记 `stale` 并提示刷新。
+- 旧数据打开时自动迁移：补齐 `version`/`rulesVersion`，将字符串审批转为带版本的审批，草稿、审批和审计记录照旧可读。
+
 ## 启动
 ```bash
 npm install
